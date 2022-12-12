@@ -5,9 +5,11 @@ import (
 )
 
 func main() {
-	fmt.Println("Welcome to our conference booking application")
-	fmt.Println("Get your tickets here to attend")
-
 	var conferenceName = "Go Conference"
+	const conferenceTicket = 50
+	var remainingTickets = 50
+
+	fmt.Println("Welcome to our", conferenceName, "booking application")
+	fmt.Println("Get one of the", remainingTickets, "tickets here to attend")
 
 }
