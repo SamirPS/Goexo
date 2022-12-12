@@ -12,11 +12,12 @@ func main() {
 	fmt.Printf("Welcome to our %v booking application\n", conferenceName)
 	fmt.Printf("Get one of the %d remaining tickets here to attend\n", remainingTickets)
 
+	var bookings []string
 	var firstName string
 	var lastName string
 	var email string
 	var userTickets uint
-	// ask user for their name
+
 	fmt.Println("Give your first name")
 	fmt.Scan(&firstName)
 	fmt.Println("Give your last name")
@@ -27,8 +28,10 @@ func main() {
 	fmt.Scan(&userTickets)
 
 	remainingTickets -= userTickets
+	bookings = append(bookings, firstName+" "+lastName)
 
 	fmt.Printf("Thanks you %v %v for booking %v tickets, you will receive a email at %v \n", firstName, lastName, userTickets, email)
 	fmt.Printf("%d tickets remaining for %v\n", remainingTickets, conferenceName)
+	fmt.Println(bookings)
 
 }
