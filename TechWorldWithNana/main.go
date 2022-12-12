@@ -6,14 +6,14 @@ import (
 
 func main() {
 	var conferenceName string = "Go Conference"
-	const conferenceTicket int = 50
-	var remainingTickets int = 50
+	const conferenceTicket uint = 50
+	var remainingTickets uint = 50
 
 	fmt.Printf("Welcome to our %v booking application\n", conferenceName)
 	fmt.Printf("Get one of the %d remaining tickets here to attend\n", remainingTickets)
 
 	var userName string
-	var userTickets int
+	var userTickets uint
 	// ask user for their name
 
 	userName = "Tom"
