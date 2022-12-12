@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
 func main() {
@@ -33,7 +34,14 @@ func main() {
 
 		fmt.Printf("Thanks you %v %v for booking %v tickets, you will receive a email at %v \n", firstName, lastName, userTickets, email)
 		fmt.Printf("%d tickets remaining for %v\n", remainingTickets, conferenceName)
-		fmt.Printf("Theses are all our bookings: %v\n", bookings)
+
+		firstNames := []string{}
+		for _, booking := range bookings {
+			var names = strings.Fields(booking)
+			firstNames = append(firstNames, names[0])
+
+		}
+		fmt.Printf("The first names of the bookings are: %v\n", firstNames)
 	}
 
 }
