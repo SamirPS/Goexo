@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
 )
 
 var conferenceName = "Go Conference"
@@ -11,7 +9,14 @@ var conferenceName = "Go Conference"
 const conferenceTicket uint = 50
 
 var remainingTickets uint = 50
-var bookings []map[string]string
+var bookings []UserData
+
+type UserData struct {
+	firstName       string
+	lastName        string
+	email           string
+	numberOfTickets uint
+}
 
 func main() {
 
@@ -55,7 +60,7 @@ func greetUsers() {
 func getFirstNames() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
-		firstNames = append(firstNames, booking["firstName"])
+		firstNames = append(firstNames, booking.firstName)
 
 	}
 	return firstNames
@@ -86,21 +91,15 @@ func bookTicket(userTickets uint, firstName string, lastName string, email strin
 	remainingTickets -= userTickets
 
 	// create a map for user
-	var userData = make(map[string]string)
-	userData["firstName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = email
-	userData["nmberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+	var userData = UserData{
+		firstName:       firstName,
+		lastName:        lastName,
+		email:           email,
+		numberOfTickets: userTickets,
+	}
 
 	bookings = append(bookings, userData)
 
 	fmt.Printf("Thanks you %v %v for booking %v tickets, you will receive a email at %v \n", firstName, lastName, userTickets, email)
 	fmt.Printf("%d tickets remaining for %v\n", remainingTickets, conferenceName)
-}
-
-func ValidateUserInput(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
-	var isValidName = len(firstName) >= 2 && len(lastName) >= 2
-	var isValidEmail = strings.Contains(email, "@")
-	var isValidTicketNumber = userTickets > 0 && userTickets <= remainingTickets
-	return isValidName, isValidEmail, isValidTicketNumber
 }
