@@ -9,12 +9,12 @@ func main() {
 	conferenceName := "Go Conference"
 	const conferenceTicket uint = 50
 	var remainingTickets uint = 50
+	var bookings []string
 
 	fmt.Printf("Welcome to our %v booking application\n", conferenceName)
-	fmt.Printf("Get one of the %d remaining tickets here to attend\n", remainingTickets)
+	fmt.Printf("Get one of the %d remaining tickets here to attend.We have %d places\n", remainingTickets, conferenceTicket)
 
 	for {
-		var bookings []string
 		var firstName string
 		var lastName string
 		var email string
@@ -22,14 +22,21 @@ func main() {
 
 		fmt.Println("Give your first name")
 		fmt.Scan(&firstName)
+
 		fmt.Println("Give your last name")
 		fmt.Scan(&lastName)
+
 		fmt.Println("Give your email")
 		fmt.Scan(&email)
+
 		fmt.Println("How many tickets")
 		fmt.Scan(&userTickets)
 
-		if userTickets <= remainingTickets {
+		var isValidName = len(firstName) >= 2 && len(lastName) >= 2
+		var isValidEmail = strings.Contains(email, "@")
+		var isValidTicketNumber = userTickets > 0 && userTickets <= remainingTickets
+
+		if isValidName && isValidEmail && isValidTicketNumber {
 			remainingTickets -= userTickets
 			bookings = append(bookings, firstName+" "+lastName)
 
@@ -50,7 +57,16 @@ func main() {
 			}
 
 		} else {
-			fmt.Printf("We only have %v ticket", remainingTickets)
+			if !isValidEmail {
+				fmt.Println("Email invalid")
+			}
+			if !isValidName {
+				fmt.Println("Name invalid")
+			}
+
+			if !isValidTicketNumber {
+				fmt.Println("Ticket number invalid")
+			}
 		}
 
 	}
