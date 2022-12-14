@@ -36,22 +36,22 @@ func contains(s []int, element int) bool {
 }
 
 func breadthfirstSearch(Graph map[string][]int, s int) {
-	var f []int
-	var t []int
-	f = append(f, s)
+	var tovisit []int
+	var visited []int
+	tovisit = append(tovisit, s)
 
-	for len(f) > 0 {
-		e := f[0]
-		f = f[1:]
-		t = append(t, e)
-		for _, v := range Graph[fmt.Sprint(e)] {
-			if !(contains(f, v) || contains(t, v)) {
-				f = append(f, v)
+	for len(tovisit) > 0 {
+		node := tovisit[0]
+		tovisit = tovisit[1:]
+		visited = append(visited, node)
+		for _, v := range Graph[fmt.Sprint(node)] {
+			if !(contains(tovisit, v) || contains(visited, v)) {
+				tovisit = append(tovisit, v)
 			}
 		}
 	}
 
-	fmt.Printf("Here the result:%v if we start from %d\n", t, s)
+	fmt.Printf("Here the result:%v if we start from %d\n", visited, s)
 	wg.Done()
 
 }
