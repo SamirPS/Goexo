@@ -38,12 +38,11 @@ func contains(s []int, element int) bool {
 func breadthfirstSearch(Graph map[string][]int, s int) {
 	var f []int
 	var t []int
-
 	f = append(f, s)
 
 	for len(f) > 0 {
-		e := f[len(f)-1]
-		f = f[0 : len(f)-1]
+		e := f[0]
+		f = f[1:]
 		t = append(t, e)
 		for _, v := range Graph[fmt.Sprint(e)] {
 			if !(contains(f, v) || contains(t, v)) {
