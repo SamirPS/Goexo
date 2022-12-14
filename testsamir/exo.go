@@ -16,37 +16,32 @@ func main() {
 	Graph["3"] = []int{4}
 	Graph["4"] = []int{2, 5}
 	Graph["5"] = []int{3}
-	for i := 0; i < 6; i++ {
-		wg.Add(1)
-		go breadthfirstSearch(Graph, i)
-
-	}
+	wg.Add(1)
+	go BFS(Graph, 1)
 	wg.Wait()
 
 }
 
-func contains(s []int, element int) bool {
-	for _, v := range s {
+func contains(s *chan int, element int) bool {
+	for v := range *s {
 		if v == element {
 			return true
 		}
 	}
-
 	return false
 }
 
-func breadthfirstSearch(Graph map[string][]int, s int) {
-	var tovisit []int
-	var visited []int
-	tovisit = append(tovisit, s)
+func BFS(Graph map[string][]int, s int) {
+	tovisit := make(chan int, len(Graph))
+	visited := make(chan int, len(Graph))
 
+	tovisit <- s
 	for len(tovisit) > 0 {
-		node := tovisit[0]
-		tovisit = tovisit[1:]
-		visited = append(visited, node)
+		node := <-tovisit
+		visited <- node
 		for _, v := range Graph[fmt.Sprint(node)] {
-			if !(contains(tovisit, v) || contains(visited, v)) {
-				tovisit = append(tovisit, v)
+			if !(contains(&tovisit, v) || contains(&visited, v)) {
+				tovisit <- v
 			}
 		}
 	}
