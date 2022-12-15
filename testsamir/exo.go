@@ -50,5 +50,6 @@ func BFS(Graph map[string][]int, s int) {
 
 		}
 	}
+	close(tovisit)
 
 }
