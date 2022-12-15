@@ -28,20 +28,38 @@ func main() {
 }
 
 func BFS(Graph map[string][]int, s int) {
+	/*
+		tovisit is the channel of node i need
+		to check.
+		Visited is a dict which permit me to
+		know, if i have already visited the node
+	*/
 	tovisit := make(chan int, len(Graph))
 	var visited = map[string]bool{}
 
 	fmt.Printf("\nWe begin with the %v node \n", s)
 
+	/*
+		init the visited dict, false for all node
+		except the departure node
+	*/
 	for i := range Graph {
+		if i == fmt.Sprint(s) {
+			visited[i] = true
+		}
 		visited[i] = false
 	}
+
 	tovisit <- s
-	visited[fmt.Sprint(s)] = true
 
 	for len(tovisit) > 0 {
 		node := <-tovisit
 		fmt.Printf("%v ", node)
+		/* for each successor of node:
+		- if we not have visited this successor :
+			- we add it to the channel
+			- and change the value of the visited map to true
+		*/
 		for _, v := range Graph[fmt.Sprint(node)] {
 			if !visited[fmt.Sprint(v)] {
 				tovisit <- v
