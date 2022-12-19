@@ -40,7 +40,7 @@ func BFS(wg *sync.WaitGroup, Graph map[string][]int, s int) {
 	defer fmt.Println(b)
 	defer close(tovisit)
 
-	fmt.Fprintf(b, "\nWe begin with the %v node \n", s)
+	fmt.Fprintf(b, "We begin with the node %v: \n", s)
 
 	/*
 		init the visited dict, false for all node
