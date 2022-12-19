@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"sync"
 )
@@ -17,27 +18,29 @@ func main() {
 	Graph["5"] = []int{3}
 	for i := 0; i < 5; i++ {
 		wg.Add(1)
-		go func(n int) {
-			defer wg.Done()
-			BFS(Graph, n)
-		}(i)
+		go BFS(&wg, Graph, i)
 
 	}
 	wg.Wait()
 
 }
 
-func BFS(Graph map[string][]int, s int) {
+func BFS(wg *sync.WaitGroup, Graph map[string][]int, s int) {
 	/*
 		tovisit is the channel of node i need
 		to check.
 		Visited is a dict which permit me to
 		know, if i have already visited the node
 	*/
+	defer wg.Done()
+
 	tovisit := make(chan int, len(Graph))
 	var visited = map[string]bool{}
+	b := &bytes.Buffer{}
+	defer fmt.Println(b)
+	defer close(tovisit)
 
-	fmt.Printf("\nWe begin with the %v node \n", s)
+	fmt.Fprintf(b, "\nWe begin with the %v node \n", s)
 
 	/*
 		init the visited dict, false for all node
@@ -54,7 +57,7 @@ func BFS(Graph map[string][]int, s int) {
 
 	for len(tovisit) > 0 {
 		node := <-tovisit
-		fmt.Printf("%v ", node)
+		fmt.Fprintf(b, "%v ", node)
 		/* for each successor of node:
 		- if we not have visited this successor :
 			- we add it to the channel
@@ -68,6 +71,5 @@ func BFS(Graph map[string][]int, s int) {
 
 		}
 	}
-	close(tovisit)
 
 }
