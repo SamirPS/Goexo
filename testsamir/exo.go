@@ -18,21 +18,23 @@ func main() {
 	Graph["5"] = []int{3}
 	for i := 0; i < 5; i++ {
 		wg.Add(1)
-		go BFS(&wg, Graph, i)
+		go func(n int) {
+			defer wg.Done()
+			BFS(Graph, n)
+		}(i)
 
 	}
 	wg.Wait()
 
 }
 
-func BFS(wg *sync.WaitGroup, Graph map[string][]int, s int) {
+func BFS(Graph map[string][]int, s int) {
 	/*
 		tovisit is the channel of node i need
 		to check.
 		Visited is a dict which permit me to
 		know, if i have already visited the node
 	*/
-	defer wg.Done()
 
 	tovisit := make(chan int, len(Graph))
 	var visited = map[string]bool{}
