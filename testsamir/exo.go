@@ -37,7 +37,7 @@ func BFS(Graph map[string][]int, s int) {
 	*/
 
 	tovisit := make(chan int, len(Graph))
-	var visited = map[string]bool{}
+	var visited sync.Map
 	b := &bytes.Buffer{}
 	defer fmt.Println(b)
 	defer close(tovisit)
@@ -50,28 +50,25 @@ func BFS(Graph map[string][]int, s int) {
 	*/
 	for i := range Graph {
 		if i == fmt.Sprint(s) {
-			visited[i] = true
+			visited.Store(i, true)
 		}
-		visited[i] = false
+		visited.Store(i, false)
 	}
 
 	tovisit <- s
-
-	for len(tovisit) > 0 {
-		node := <-tovisit
-		fmt.Fprintf(b, "%v ", node)
-		/* for each successor of node:
-		- if we not have visited this successor :
-			- we add it to the channel
-			- and change the value of the visited map to true
-		*/
-		for _, v := range Graph[fmt.Sprint(node)] {
-			if !visited[fmt.Sprint(v)] {
-				tovisit <- v
-				visited[fmt.Sprint(v)] = true
-			}
-
-		}
+	for n := range tovisit {
+		go searchNeighbours(Graph, visited, tovisit, n)
 	}
 
+}
+
+func searchNeighbours(Graph map[string][]int, visited sync.Map, tovisit chan int, node int) {
+	for _, v := range Graph[fmt.Sprint(node)] {
+		result, _ := visited.Load(fmt.Sprint(v))
+		if !result.(bool) {
+			tovisit <- v
+			visited.Store(fmt.Sprint(v), true)
+		}
+
+	}
 }
