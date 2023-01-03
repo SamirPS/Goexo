@@ -40,7 +40,6 @@ func BFS(Graph map[string][]int, s int) {
 	var visited sync.Map
 	b := &bytes.Buffer{}
 	defer fmt.Println(b)
-	defer close(tovisit)
 
 	fmt.Fprintf(b, "We begin with the node %v: \n", s)
 
@@ -57,18 +56,28 @@ func BFS(Graph map[string][]int, s int) {
 
 	tovisit <- s
 	for n := range tovisit {
+		if n == -1 {
+			break
+		}
+		fmt.Fprintf(b, " %d ", n)
 		go searchNeighbours(Graph, visited, tovisit, n)
 	}
-
 }
 
 func searchNeighbours(Graph map[string][]int, visited sync.Map, tovisit chan int, node int) {
+	c := -1
+
 	for _, v := range Graph[fmt.Sprint(node)] {
 		result, _ := visited.Load(fmt.Sprint(v))
 		if !result.(bool) {
+			c += 1
 			tovisit <- v
 			visited.Store(fmt.Sprint(v), true)
 		}
 
 	}
+	if c == -1 {
+		tovisit <- c
+	}
+
 }
