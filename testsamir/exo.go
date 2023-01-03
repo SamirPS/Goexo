@@ -60,8 +60,10 @@ func BFS(Graph map[string][]int, s int) {
 	tovisit <- s
 	for n := range tovisit {
 		if n == -1 {
-			wg.Wait()
-			close(tovisit)
+			go func() {
+				wg.Wait()
+				close(tovisit)
+			}()
 			break
 		}
 		fmt.Fprintf(b, " %d ", n)
