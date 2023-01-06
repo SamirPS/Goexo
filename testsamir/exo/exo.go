@@ -49,12 +49,8 @@ func BFS(Graph map[string][]int, s int) {
 		except the departure node
 	*/
 	for i := range Graph {
-		if i == fmt.Sprint(s) {
-			visited.Store(i, true)
-		} else {
-			visited.Store(i, false)
+		visited.Store(i, i == fmt.Sprint(s))
 
-		}
 	}
 
 	tovisit <- s
